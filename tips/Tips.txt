@@ -1,0 +1,244 @@
+use db(use qasim)	db ma jana k lia or agr nhi toh bna k onka ander enter ho jaye ga
+
+show dbs		jitni dbs hain wo btata ha
+
+db			jis db ma hain wo btata
+
+db.qasimdata.find()	jo data enter kia hoa ha database ma wo btata
+
+db.qasimdata.find().pretty()		jo data ha osko acha triqa ma show krwata
+
+****************** INSERT IN DATABASE	(CREATE)CRUD ***************************
+
+show collections 	check krna k lia k kitna collections hain aik database ma 
+
+db.users.insertOne()	1 data  kaisa insert krna ha
+db.users.insertOne({name: "qasim", type:"Male"})	one document added
+
+db.users.insertMany()	zyada data aik collection ma kaisa insert krna ha
+			array of multiple object
+db.users.insertMany([{name: "qasim", type:"Male"},{name: "saif", type:"Male"},{name: "mozam", type:"Male"}])
+
+****************** READ IN DATABASE	(READ)CRUD ***************************
+
+			db.collection.find(query,projection)
+
+db.collection.find()		is sa collection pa jo collection ha oska sara data mil jaye ga
+
+db.collection.find().pretty()	sara data aik achy triqa sa dikhata ha
+
+			SPECIFIC DATA
+
+db.collection.find({name:"qasim"})	ab jaha name qasim ha wo data dikhaye ga
+
+db.collection.find({name:"qasim"}, {name:1})	iska matlb khali name dikha ga
+db.collection.find({name:"qasim"}, {name:0})	name chor k baki sab dikhy gy
+db.collection.find({name:"qasim"}, {_id:0,name:1})	is sa id b ni dikhaye ga only name
+
+db.collection.find({name:"qasim"}).limit(1)	jitna b data ha onma sa jo phla match ho jaye ga wohi mila ga sirf aik data
+db.collection.find({name:"qasim"}).limit(2)	is sa 2 data aye gy
+
+db.collection.findOne({name:"qasim"})		to find one and first data that match name=qasim
+
+db.collection.find({name:"qasim"}).limit(1).skip(1)	first match value ko skip kr k 2nd show krwa da ga
+
+****************** UPDATE IN DATABASE	(UPDATE)CRUD ***************************
+
+	UpdataOne()	=>	db.COLLECTION_NAME.updateOne(<filter>,<update>)
+
+	UpdataMany()	=>	db.COLLECTION_NAME.updateMany(<filter>,<update>)
+
+db.COLLECTION_NAME.updateOne({name:"qasim"},{$set:{type:"boy"}})	$set ma jo update krna ha wo likhna ha
+
+$set operator replaces the value of a field with the specified value
+
+
+db.COLLECTION_NAME.updateMany({type: "male"}, {$set: {active:false}})		to update many fields
+
+
+
+****************** DELETE IN DATABASE	(DELETE)CRUD ***************************
+
+	deleteMany()	=>	db.COLLECTION_NAME.deleteMany(DELETION_CRITTERIA)
+
+
+db.COLLECTION_NAME.deleteMany({type:"boy"})	is sa jaha type hogi wo delete ho jaye ga
+
+db.COLLECTION_NAME.deleteMany({})		is sa os collection k sab data delete ho jaye gy
+
+
+
+
+
+
+
+////////////////////////////	comparison operator in Mongoose OR MongoDB	///////////////////////////////////
+
+$eq					equal to
+$gt					greater then
+$gte				greater then equal to
+$in					matches any value in an array
+$lt					less then
+$lte				less then equal to
+$ne					not equal
+$nin				matches none of the value in an array
+
+
+
+
+////////////////////////////	Logical operator in Mongoose OR MongoDB	///////////////////////////////////
+
+$and
+
+$not
+
+$nor
+
+$or
+
+
+//////////////////////////////////////////    COUNT THE DOCUMENTS IN MONGOOSE     /////////////////////////////
+
+
+
+const getDocument = async()=>{
+    try{
+
+        const result = await Playlist
+        .find({$and :  [{ ctype:"Back End"  } , { author: "Qasim" }]}) 
+        .select({name:1})
+        .countDocuments();                                          //      ya method count krwa k da ga k aik cheez kitni pari hoi ha          
+        console.log(result);
+    }catch(err){
+        console.log(err);
+    }
+}
+
+getDocument();
+
+
+
+
+////////////////////////////////////////////    SORTING THE DOCUMENTS IN MONGOOSE     /////////////////////////////
+
+const getDocument = async () => {
+    try {
+
+        const result = await Playlist
+            .find({ author: "Qasim" })
+            .select({ name: 1 })
+            .sort({ name: -1 });                             //     if  name = 1 then Assending(a to z) & if name = -1 then decending(z to a)
+        console.log(result);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+getDocument();
+
+
+
+
+
+
+///////////////////////////////////////////// UPDATE IN MONGOOSE    ///////////////////////////////////////////
+
+
+Name												Description
+
+$currentDate			Sets the value of a field to current date, either as a Date or a Timestamp.
+
+$inc					Increments the value of the field by the specified amount.
+
+$min					Only updates the field if the specified value is less than the existing field value.
+
+$max					Only updates the field if the specified value is greater than the existing field value.
+
+$mul					Multiplies the value of the field by the specified amount.
+
+$rename					Renames a field.
+
+$set					Sets the value of a field in a document.
+
+$setOnInsert			Sets the value of a field if an update results in an insert of a document. Has no effect on update operations that modify existing documents.
+
+$unset					Removes the specified field from a document.
+
+
+
+
+
+
+findByIdAndUpdate()
+findOneAndUpdate()
+
+const updateDocument = async(_id)=>{
+    try{
+        const result = await Playlist.findByIdAndUpdate({_id},{
+            $set : {                                        // to update any value
+                name: "JavaScript"
+            }},{
+                new : true,
+                useFindAndModify: false
+            });
+        console.log(result);
+
+    }catch(err){
+        console.log(err);
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
